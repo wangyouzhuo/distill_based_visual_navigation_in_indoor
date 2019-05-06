@@ -15,7 +15,7 @@ class Spe_Worker(Worker):
         buffer_s, buffer_a, buffer_r, buffer_t = [], [], [], []
         while not self.coord.should_stop() and _get_train_count() < MAX_GLOBAL_EP:
             s, t = self.env.reset_env()
-            EPI_COUNT = _add_train_count()
+            # EPI_COUNT = _add_train_count()
             target_id = self.env.terminal_state_id
             ep_r = 0
             step_in_episode = 0
@@ -41,8 +41,17 @@ class Spe_Worker(Worker):
                         buffer_v_special.append(v_special)
 
                     buffer_v_special.reverse()
+
                     buffer_s, buffer_a, buffer_t = np.vstack(buffer_s), np.array(buffer_a), np.vstack(buffer_t)
                     buffer_v_special = np.vstack(buffer_v_special)
+                    print("---------------------------------------------")
+                    print("buffer_s:", buffer_s.shape)
+                    print("buffer_a:", buffer_a.shape)
+                    print("buffer_t:", buffer_t.shape)
+                    print("buffer_v_special:", buffer_v_special.shape)
+                    print("buffer_s:", buffer_s)
+
+                    print("---------------------------------------------")
                     feed_dict = {
                         self.AC.s: buffer_s,
                         self.AC.a: buffer_a,
@@ -61,10 +70,10 @@ class Spe_Worker(Worker):
                         roa = round((self.env.short_dist*1.0/step_in_episode),4)
                     else:
                         roa = 0.000
-                    print("Train!     Epi:%6s || Spe_Roa:%5s  || Spe_Reward:%5s" % (EPI_COUNT, round(roa, 3), round(ep_r, 2)))
-                    if EPI_COUNT>100 and EPI_COUNT % EVALUATE_ITER == 0:
-                        roa_eva,reward_eva = self.evaluate()
-                        print("Evaluate!  Epi:%5s || Roa_mean:%6s || Reward_mean:%7s "%(EPI_COUNT,round(roa_eva,4),round(reward_eva,3)))
+                    #print("Train!     Epi:%6s || Spe_Roa:%5s  || Spe_Reward:%5s" % (EPI_COUNT, round(roa, 3), round(ep_r, 2)))
+                    # if EPI_COUNT>100 and EPI_COUNT % EVALUATE_ITER == 0:
+                    #     roa_eva,reward_eva = self.evaluate()
+                    #     print("Evaluate!  Epi:%5s || Roa_mean:%6s || Reward_mean:%7s "%(EPI_COUNT,round(roa_eva,4),round(reward_eva,3)))
                     break
 
 

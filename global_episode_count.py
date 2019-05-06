@@ -76,8 +76,32 @@ def _get_result_mean_list():
     return ROA_MEAN, REWARD_LIST
 
 
+#----------------------------------------------roa------------------------------------------
+def _init_roa_list():
+    global GLOBAL_ROA_LIST
+    GLOBAL_ROA_LIST = []
+
+def _append_roa_list(roa):
+    global GLOBAL_ROA_LIST
+    GLOBAL_ROA_LIST.append(roa)
+
+def _get_roa_mean():
+    global GLOBAL_ROA_LIST
+    return GLOBAL_ROA_LIST,average(GLOBAL_ROA_LIST)
 
 
+#-------------------------------------------list_to_be_show-----------------------------------
+def _init_show_list():
+    global GLOBAL_SHOW_LIST
+    GLOBAL_SHOW_LIST = []
+
+def _append_show_list(roa):
+    global GLOBAL_SHOW_LIST
+    GLOBAL_SHOW_LIST.append(roa)
+
+def _get_show_list():
+    global GLOBAL_SHOW_LIST
+    return GLOBAL_SHOW_LIST
 
 
 

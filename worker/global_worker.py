@@ -1,5 +1,7 @@
 from env.THOR_LOADER import *
 from global_episode_count import _get_train_count,_add_train_count
+from global_episode_count import _append_roa_list,_get_roa_mean,_init_roa_list
+from global_episode_count import _append_show_list,_init_show_list
 from config.constant import *
 import numpy as np
 from worker.worker import Worker
@@ -67,10 +69,16 @@ class Glo_Worker(Worker):
                         roa = round((self.env.short_dist * 1.0 / step_in_episode), 4)
                     else:
                         roa = 0.000
-                    print("Train!     Epi:%6s || Glo_Roa:%5s  || Glo_Reward:%5s" % (EPI_COUNT, round(roa, 3), round(ep_r, 2)))
-                    if EPI_COUNT>100 and EPI_COUNT % EVALUATE_ITER == 0:
-                        roa_eva,reward_eva = self.evaluate()
-                        print("Evaluate!  Epi:%5s || Roa_mean:%6s || Reward_mean:%7s "%(EPI_COUNT,round(roa_eva,4),round(reward_eva,3)))
+                    _append_roa_list(roa)
+                    # print("Train!     Epi:%6s || Glo_Roa:%5s  || Glo_Reward:%5s" % (EPI_COUNT, round(roa, 3), round(ep_r, 2)))
+                    if EPI_COUNT>100 and _get_train_count() % EVALUATE_ITER == 0:
+                        roa_list,roa_mean = _get_roa_mean()
+                        print("EPI_COUNT: ",EPI_COUNT,"roa_len:",len(roa_list)," || roa_mean:",roa_mean,)
+                        _append_show_list(roa_mean)
+                        _init_roa_list()
+                        # roa_eva,reward_eva = self.evaluate()
+                        # print("Evaluate!  Epi:%5s || Roa_mean:%6s || Reward_mean:%7s "%(EPI_COUNT,round(roa_eva,4),round(reward_eva,3)))
+
                     break
 
     def evaluate(self):
